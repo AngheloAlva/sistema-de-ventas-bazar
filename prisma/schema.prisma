@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ROL {
+  ADMIN
+  VENDEDOR
+}
+
+enum TIPO_PAGO {
+  EFECTIVO
+  TARJETA
+}
+
+model Usuario {
+  id                  String @id @default(uuid())
+  nombre              String
+  contrasena          String
+  ventas_dia          Ventas[]
+  direccion           String
+  telefono            String
+  rut                 String
+  fecha_nacimiento    DateTime
+  rol                 ROL
+}
+
+model Ventas {
+  id          String @id @default(uuid())
+  fecha       DateTime
+  total       Int
+  tipo_pago   TIPO_PAGO
+  tipo_boleta String
+  userId      String
+  usuario     Usuario @relation(fields: [userId], references: [id])
+  personaId   String
+  persona     Persona @relation(fields: [personaId], references: [id])
+}
+
+model Detalle_venta {
+  id          String @id @default(uuid())
+  cantidad    Int
+  precio      Int
+  producto    Producto @relation(fields: [id], references: [id])
+}
+
+model Producto {
+  id                String @id @default(uuid())
+  nombre            String
+  precio            Int
+  stock             Int
+  ventas            Detalle_venta[]
+  SKU               String
+  imagen            String
+  descripcion       String
+  categoria         String
+  marca             String
+  proveedor         String
+  fecha_ingreso     DateTime
+  fecha_vencimiento DateTime
+}
+
+model Persona {
+  id                String @id @default(uuid())
+  nombre            String
+  direccion         String
+  telefono          String
+  rut               String
+  fecha_nacimiento  DateTime
+  razon_social      String
+  ventas            Ventas[]
+}
