@@ -16,6 +16,7 @@ datasource db {
 enum ROL {
   ADMIN
   VENDEDOR
+  JEFE_VENTAS
 }
 
 enum TIPO_PAGO {
@@ -23,60 +24,79 @@ enum TIPO_PAGO {
   TARJETA
 }
 
+enum TIPO_DOCUMENTO {
+  BOLETA
+  FACTURA
+}
+
 model Usuario {
-  id                  String @id @default(uuid())
+  id                  String  @id @default(uuid())
   nombre              String
   contrasena          String
-  ventas_dia          Ventas[]
   direccion           String
   telefono            String
   rut                 String
   fecha_nacimiento    DateTime
   rol                 ROL
+  ventas              Venta[]
 }
 
-model Ventas {
-  id          String @id @default(uuid())
-  fecha       DateTime
-  total       Int
-  tipo_pago   TIPO_PAGO
-  tipo_boleta String
-  userId      String
-  usuario     Usuario @relation(fields: [userId], references: [id])
-  personaId   String
-  persona     Persona @relation(fields: [personaId], references: [id])
+
+model Venta {
+  id                String          @id @default(uuid())
+  fecha             DateTime
+  tipoDocumento     TIPO_DOCUMENTO
+  totalNeto         Float
+  tipo_pago         TIPO_PAGO
+  iva               Float
+  totalFinal        Float
+  usuario           Usuario         @relation(fields: [usuarioId], references: [id])
+  usuarioId         String
+  detalleVentas     DetalleVenta[]
+  cliente           Cliente?        @relation(fields: [clienteId], references: [id])
+  clienteId         String?
+  diaVentaId        String
+  diaVenta          DiaVentas       @relation(fields: [diaVentaId], references: [id])
 }
 
-model Detalle_venta {
-  id          String @id @default(uuid())
-  cantidad    Int
-  precio      Int
-  producto    Producto @relation(fields: [id], references: [id])
+model DetalleVenta {
+  id                String   @id @default(uuid())
+  cantidad          Int
+  precioUnitario    Float
+  totalProducto     Float
+  producto          Producto @relation(fields: [productoId], references: [id])
+  productoId        String
+  venta             Venta    @relation(fields: [ventaId], references: [id])
+  ventaId           String
 }
 
 model Producto {
-  id                String @id @default(uuid())
+  id                String   @id @default(uuid())
   nombre            String
-  precio            Int
-  stock             Int
-  ventas            Detalle_venta[]
-  SKU               String
-  imagen            String
   descripcion       String
-  categoria         String
-  marca             String
-  proveedor         String
-  fecha_ingreso     DateTime
-  fecha_vencimiento DateTime
+  precio            Int
+  SKU               String   @unique
+  valorUnitario     Float
+  imagen            String
+  stock             Int
+  fechaVencimiento  DateTime?
+  detalleVentas     DetalleVenta[]
 }
 
-model Persona {
-  id                String @id @default(uuid())
+model Cliente {
+  id                String   @id @default(uuid())
   nombre            String
-  direccion         String
-  telefono          String
-  rut               String
-  fecha_nacimiento  DateTime
-  razon_social      String
-  ventas            Ventas[]
+  rut               String   @unique
+  razonSocial       String?
+  direccion         String?
+  telefono          String?
+  fecha_nacimiento  DateTime?
+  ventas            Venta[]
+}
+
+model DiaVentas {
+  id                String   @id @default(uuid())
+  fecha             DateTime @unique
+  abierto           Boolean  @default(false)
+  ventas            Venta[]
 }
