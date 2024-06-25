@@ -1,25 +1,12 @@
-import Image from "next/image"
-import { MoreHorizontal } from "lucide-react"
-import { Badge } from "@/app/components/ui/badge"
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/app/components/ui/table"
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger,
-} from "@/app/components/ui/dropdown-menu"
-import { Button } from "../ui/button"
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/app/components/ui/table"
 import ProductItem from "./ProductItem"
+import { Producto } from "@prisma/client"
 
-export default function ProductTable(): React.ReactElement {
+export default async function ProductTable(): Promise<React.ReactElement> {
+	const products = await fetch("http://localhost:3000/api/products")
+		.then((response) => response.json())
+		.then((data) => data.body.products as Producto[])
+
 	return (
 		<Table>
 			<TableHeader>
@@ -38,7 +25,9 @@ export default function ProductTable(): React.ReactElement {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				<ProductItem />
+				{products.map((product) => (
+					<ProductItem key={product.id} {...product} estado="Activo" />
+				))}
 			</TableBody>
 		</Table>
 	)
