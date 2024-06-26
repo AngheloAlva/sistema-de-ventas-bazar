@@ -176,7 +176,7 @@ async function main() {
 		},
 	})
 
-	await prisma.cliente.create({
+	const cliente2 = await prisma.cliente.create({
 		data: {
 			nombre: "Cliente 2",
 			rut: "87654321-0",
@@ -204,6 +204,7 @@ async function main() {
 			iva: 570,
 			totalFinal: 3570,
 			usuario: { connect: { id: vendedor.id } },
+			cliente: { connect: { id: cliente2.id } },
 			detalleVentas: {
 				create: [
 					{
