@@ -74,9 +74,9 @@ model Producto {
   id                String   @id @default(uuid())
   nombre            String
   descripcion       String
-  precio            Int
   SKU               String   @unique
   valorUnitario     Float
+  estado            Boolean   @default(true)
   imagen            String
   stock             Int
   fechaVencimiento  DateTime?

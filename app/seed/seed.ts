@@ -1,15 +1,99 @@
-import { ROL, TIPO_DOCUMENTO, TIPO_PAGO } from "@prisma/client"
+import { Producto, ROL, TIPO_DOCUMENTO, TIPO_PAGO } from "@prisma/client"
 import prisma from "../lib/prisma"
 import bcrypt from "bcryptjs"
+
+const productos = [
+	{
+		nombre: "Cuaderno Universitario",
+		descripcion: "Cuaderno universitario de 100 hojas",
+		estado: true,
+		imagen: "/cuaderno.webp",
+		SKU: "SKU001",
+		valorUnitario: 2500,
+		stock: 100,
+		fechaVencimiento: new Date("2025-01-01"),
+	},
+	{
+		nombre: "Lápiz Pasta Azul",
+		descripcion: "Lápiz pasta azul de punta fina",
+		estado: true,
+		imagen: "/lapiz.webp",
+		SKU: "SKU004",
+		valorUnitario: 500,
+		stock: 200,
+		fechaVencimiento: new Date("2024-01-01"),
+	},
+	{
+		nombre: "Borrador de Goma",
+		descripcion: "Borrador de goma de 5cm x 2cm",
+		estado: true,
+		imagen: "/borrador.webp",
+		SKU: "SKU005",
+		valorUnitario: 300,
+		stock: 150,
+		fechaVencimiento: new Date("2024-12-31"),
+	},
+	{
+		nombre: "Regla 30cm",
+		descripcion: "Regla de 30cm de plástico",
+		estado: true,
+		imagen: "/regla.webp",
+		SKU: "SKU006",
+		valorUnitario: 700,
+		stock: 80,
+		fechaVencimiento: new Date("2024-01-01"),
+	},
+	{
+		nombre: "Tijeras",
+		descripcion: "Tijeras de punta redonda",
+		estado: true,
+		imagen: "/tijeras.webp",
+		SKU: "SKU007",
+		valorUnitario: 1500,
+		stock: 60,
+		fechaVencimiento: new Date("2024-12-31"),
+	},
+	{
+		nombre: "Resaltador Amarillo",
+		descripcion: "Resaltador amarillo de punta biselada",
+		estado: true,
+		imagen: "/resaltador.webp",
+		SKU: "SKU008",
+		valorUnitario: 800,
+		stock: 90,
+		fechaVencimiento: new Date("2025-01-01"),
+	},
+	{
+		nombre: "Corrector Líquido",
+		descripcion: "Corrector líquido de 20ml",
+		estado: true,
+		imagen: "/corrector.webp",
+		SKU: "SKU009",
+		valorUnitario: 1200,
+		stock: 70,
+		fechaVencimiento: new Date("2025-01-01"),
+	},
+	{
+		nombre: "Bolsa de Lápices de Colores",
+		descripcion: "Bolsa de 12 lápices de colores",
+		estado: true,
+		imagen: "/lapices.webp",
+		SKU: "SKU010",
+		valorUnitario: 4500,
+		stock: 50,
+		fechaVencimiento: new Date("2024-01-01"),
+	},
+]
 
 async function main() {
 	console.log("Seeding...")
 
-	await prisma.usuario.deleteMany()
-	await prisma.producto.deleteMany()
-	await prisma.cliente.deleteMany()
+	await prisma.detalleVenta.deleteMany()
 	await prisma.venta.deleteMany()
 	await prisma.diaVentas.deleteMany()
+	await prisma.cliente.deleteMany()
+	await prisma.usuario.deleteMany()
+	await prisma.producto.deleteMany()
 
 	// Crear Usuarios
 	await prisma.usuario.create({
@@ -51,28 +135,34 @@ async function main() {
 	// Crear Productos
 	const producto1 = await prisma.producto.create({
 		data: {
-			nombre: "Producto 1",
-			SKU: "SKU001",
+			nombre: "Pegamento en Barra",
+			descripcion: "Pegamento en barra de 40g",
+			estado: false,
+			imagen: "/pegamento.webp",
+			SKU: "SKU011",
 			valorUnitario: 1000,
-			stock: 50,
-			fechaVencimiento: new Date("2024-12-31"),
-			descripcion: "Producto 1 Descripcion",
-			imagen: "https://via.placeholder.com/150",
-			precio: 1000,
+			stock: 120,
+			fechaVencimiento: new Date("2025-01-01"),
 		},
 	})
 
 	const producto2 = await prisma.producto.create({
 		data: {
-			nombre: "Producto 2",
-			SKU: "SKU002",
-			valorUnitario: 2000,
-			stock: 30,
-			fechaVencimiento: new Date("2023-12-31"),
-			descripcion: "Producto 2 Descripcion",
-			imagen: "https://via.placeholder.com/150",
-			precio: 2000,
+			nombre: "Cartulina Blanca",
+			descripcion: "Cartulina blanca tamaño carta",
+			estado: true,
+			imagen: "/cartulina.webp",
+			SKU: "SKU012",
+			valorUnitario: 100,
+			stock: 500,
+			fechaVencimiento: new Date("2025-01-01"),
 		},
+	})
+
+	productos.forEach(async (producto) => {
+		await prisma.producto.create({
+			data: producto,
+		})
 	})
 
 	// Crear Clientes
