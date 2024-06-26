@@ -17,7 +17,6 @@ export default function ProductItem({
 	fechaVencimiento,
 	imagen,
 	nombre,
-	precio,
 	stock,
 	valorUnitario,
 	estado,
@@ -26,22 +25,24 @@ export default function ProductItem({
 		<TableRow>
 			<TableCell className="hidden sm:table-cell">
 				<Image
-					src={"/nothing"}
+					src={`/imgs/products${imagen}`}
 					alt={nombre}
 					height="64"
 					width="64"
 					className="aspect-square rounded-md object-cover"
 				/>
 			</TableCell>
+			<TableCell className="font-medium">{SKU}</TableCell>
 			<TableCell className="font-medium">{nombre}</TableCell>
 			<TableCell>
-				<Badge variant="outline">{estado}</Badge>
+				<Badge variant="outline">{estado ? "Activo" : "Inactivo"}</Badge>
 			</TableCell>
-			<TableCell>${precio}</TableCell>
+			<TableCell>${valorUnitario.toLocaleString("es-Cl")}</TableCell>
 			<TableCell className="hidden md:table-cell">{stock}</TableCell>
 			<TableCell className="hidden md:table-cell">
 				{fechaVencimiento ? fechaVencimiento.toString() : "Sin fecha de vencimiento"}
 			</TableCell>
+			<TableCell className="hidden lg:table-cell">{descripcion}</TableCell>
 			<TableCell>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
@@ -54,7 +55,7 @@ export default function ProductItem({
 						<DropdownMenuLabel>Acciones</DropdownMenuLabel>
 						<DropdownMenuItem>Editar</DropdownMenuItem>
 						<DropdownMenuItem>Eliminar</DropdownMenuItem>
-						{estado === "activo" ? (
+						{estado ? (
 							<DropdownMenuItem>Desactivar</DropdownMenuItem>
 						) : (
 							<DropdownMenuItem>Activar</DropdownMenuItem>
@@ -70,10 +71,9 @@ interface ProductItemProps {
 	imagen: string
 	nombre: string
 	descripcion: string
-	precio: number
 	SKU: string
 	valorUnitario: number
 	stock: number
 	fechaVencimiento: Date | null
-	estado: string
+	estado: boolean
 }
