@@ -1,8 +1,14 @@
 "use client"
 
+import {
+	SaleDetailCard,
+	SaleDetailCardSkeleton,
+	SalesTabs,
+	SalesTabsSkeleton,
+} from "../components/dashboard"
 import { useEffect, useState } from "react"
-import { SaleDetailCard, SalesTabs } from "../components/dashboard"
-import { VentaResponse } from "../interfaces/interfaces"
+
+import type { VentaResponse } from "../interfaces/interfaces"
 
 export default function HomePage() {
 	const [sales, setSales] = useState<VentaResponse[]>([])
@@ -34,16 +40,16 @@ export default function HomePage() {
 					<AmountCard amount={1923} increase={23} />
 				</div> */}
 				{loading ? (
-					<div>Loading...</div>
+					<SalesTabsSkeleton />
 				) : (
 					<SalesTabs sales={sales} handleSaleSelect={handleSaleSelect} />
 				)}
 			</div>
 			<div>
-				{loading && selectedSale === undefined ? (
-					<div>Loading...</div>
-				) : (
+				{!loading && selectedSale !== undefined ? (
 					<SaleDetailCard saleId={selectedSale} />
+				) : (
+					<SaleDetailCardSkeleton />
 				)}
 			</div>
 		</main>

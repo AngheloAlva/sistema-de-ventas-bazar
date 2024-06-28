@@ -1,4 +1,4 @@
-import type { Cliente, Producto, Usuario } from "@prisma/client"
+import type { Cliente, Producto, User } from "@prisma/client"
 
 export interface VentaResponse {
 	id: string
@@ -8,7 +8,7 @@ export interface VentaResponse {
 	tipo_pago: string
 	iva: number
 	totalFinal: number
-	usuario: Usuario
+	usuario: User
 	usuarioId: string
 	cliente: Cliente
 	clienteId: string
@@ -23,7 +23,7 @@ export interface VentaByIdResponse {
 	tipo_pago: string
 	iva: number
 	totalFinal: number
-	usuario: Usuario
+	usuario: User
 	usuarioId: string
 	cliente: Cliente
 	clienteId: string

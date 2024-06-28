@@ -8,13 +8,11 @@ import {
 } from "@/app/components/ui/table"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs"
+import { Skeleton } from "../ui/skeleton"
 import { Button } from "../ui/button"
 import { File } from "lucide-react"
-import SaleItem from "./SaleItem"
 
-import type { VentaResponse } from "@/app/interfaces/interfaces"
-
-export default function SalesTabs({ sales, handleSaleSelect }: SaleProps): React.ReactElement {
+export default function SalesTabsSkeleton(): React.ReactElement {
 	return (
 		<Tabs defaultValue="week">
 			<div className="flex items-center">
@@ -49,17 +47,34 @@ export default function SalesTabs({ sales, handleSaleSelect }: SaleProps): React
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{sales.length === 0 ? (
-									<TableRow>
-										<TableCell colSpan={7}>
-											<div className="text-center text-muted-foreground">No hay ventas</div>
-										</TableCell>
-									</TableRow>
-								) : (
-									sales.map((sale) => (
-										<SaleItem key={sale.id} handleSaleSelect={handleSaleSelect} {...sale} />
-									))
-								)}
+								<TableRow>
+									<TableCell>
+										<div className="mb-2 font-medium">
+											<Skeleton className="h-4 w-full" />
+										</div>
+										<div className="hidden text-sm text-muted-foreground md:inline">
+											<Skeleton className="h-3 w-full" />
+										</div>
+									</TableCell>
+									<TableCell className="hidden sm:table-cell">
+										<Skeleton className="h-4 w-1/2" />
+									</TableCell>
+									<TableCell className="hidden sm:table-cell">
+										<Skeleton className="h-4 w-full" />
+									</TableCell>
+									<TableCell className="hidden md:table-cell">
+										<Skeleton className="h-4 w-1/2" />
+									</TableCell>
+									<TableCell className="hidden md:table-cell">
+										<Skeleton className="h-4 w-full" />
+									</TableCell>
+									<TableCell className="hidden md:table-cell">
+										<Skeleton className="h-4 w-full" />
+									</TableCell>
+									<TableCell className="hidden md:table-cell">
+										<Skeleton className="h-4 w-2/3" />
+									</TableCell>
+								</TableRow>
 							</TableBody>
 						</Table>
 					</CardContent>
@@ -67,9 +82,4 @@ export default function SalesTabs({ sales, handleSaleSelect }: SaleProps): React
 			</TabsContent>
 		</Tabs>
 	)
-}
-
-interface SaleProps {
-	sales: VentaResponse[]
-	handleSaleSelect: (saleId: string) => void
 }

@@ -1,4 +1,4 @@
-import { Producto, ROL, TIPO_DOCUMENTO, TIPO_PAGO } from "@prisma/client"
+import { TIPO_DOCUMENTO, TIPO_PAGO } from "@prisma/client"
 import prisma from "../lib/prisma"
 import bcrypt from "bcryptjs"
 
@@ -92,43 +92,46 @@ async function main() {
 	await prisma.venta.deleteMany()
 	await prisma.diaVentas.deleteMany()
 	await prisma.cliente.deleteMany()
-	await prisma.usuario.deleteMany()
+	await prisma.user.deleteMany()
 	await prisma.producto.deleteMany()
 
 	// Crear Usuarios
-	await prisma.usuario.create({
+	await prisma.user.create({
 		data: {
-			nombre: "Admin",
-			contrasena: bcrypt.hashSync("admin123"),
-			direccion: "123 Main St",
-			telefono: "123456789",
+			name: "Admin",
+			password: bcrypt.hashSync("admin123"),
+			address: "123 Main St",
+			phone: "123456789",
 			rut: "12345678-9",
-			fecha_nacimiento: new Date("1980-01-01"),
-			rol: ROL.ADMIN,
+			bornDate: new Date("1980-01-01"),
+			role: "ADMIN",
+			email: "admin@gmail.com",
 		},
 	})
 
-	await prisma.usuario.create({
+	await prisma.user.create({
 		data: {
-			nombre: "Jefe de Ventas",
-			contrasena: bcrypt.hashSync("jefe123"),
-			direccion: "456 Market St",
-			telefono: "987654321",
+			name: "Jefe de Ventas",
+			password: bcrypt.hashSync("jefe123"),
+			address: "456 Market St",
+			phone: "987654321",
 			rut: "98765432-1",
-			fecha_nacimiento: new Date("1985-01-01"),
-			rol: ROL.JEFE_VENTAS,
+			bornDate: new Date("1985-01-01"),
+			role: "JEFE_VENTAS",
+			email: "jefe.ventas@gmail.com",
 		},
 	})
 
-	const vendedor = await prisma.usuario.create({
+	const vendedor = await prisma.user.create({
 		data: {
-			nombre: "Vendedor",
-			contrasena: bcrypt.hashSync("vendedor123"),
-			direccion: "789 Broadway",
-			telefono: "555555555",
+			name: "Vendedor",
+			password: bcrypt.hashSync("vendedor123"),
+			address: "789 Broadway",
+			phone: "555555555",
 			rut: "55555555-5",
-			fecha_nacimiento: new Date("1990-01-01"),
-			rol: ROL.VENDEDOR,
+			bornDate: new Date("1990-01-01"),
+			role: "VENDEDOR",
+			email: "vendedor1@gmail.com",
 		},
 	})
 

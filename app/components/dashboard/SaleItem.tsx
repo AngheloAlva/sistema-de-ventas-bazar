@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from "../ui/table"
 
-import type { Cliente, Usuario } from "@prisma/client"
+import type { Cliente, User } from "@prisma/client"
 
 export default function SaleItem({
 	id,
@@ -13,8 +13,6 @@ export default function SaleItem({
 	tipoDocumento,
 	handleSaleSelect,
 }: SaleItemProps): React.ReactElement {
-	console.log(id)
-
 	return (
 		<TableRow className="cursor-pointer hover:bg-gray-100" onClick={() => handleSaleSelect(id)}>
 			<TableCell>
@@ -43,7 +41,7 @@ export default function SaleItem({
 			<TableCell className="hidden md:table-cell">
 				{new Date(fecha).toLocaleDateString("es-CL")}
 			</TableCell>
-			<TableCell className="hidden md:table-cell">{usuario?.nombre}</TableCell>
+			<TableCell className="hidden md:table-cell">{usuario?.name}</TableCell>
 		</TableRow>
 	)
 }
@@ -56,6 +54,6 @@ interface SaleItemProps {
 	totalNeto: number
 	iva: number
 	fecha: Date
-	usuario: Usuario
+	usuario: User
 	handleSaleSelect: (saleId: string) => void
 }

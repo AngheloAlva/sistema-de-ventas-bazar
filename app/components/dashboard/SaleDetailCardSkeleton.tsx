@@ -1,41 +1,23 @@
 import { Copy, CreditCard, MoreVertical } from "lucide-react"
-import { Separator } from "@/app/components/ui/separator"
-import { Button } from "@/app/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card"
+import { Button } from "../ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { Separator } from "../ui/separator"
+import { Skeleton } from "../ui/skeleton"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "@/app/components/ui/dropdown-menu"
+} from "../ui/dropdown-menu"
 
-import type { VentaByIdResponse } from "../../interfaces/interfaces"
-import { useEffect, useState } from "react"
-
-export default function SaleDetailCard({ saleId }: SaleDetailCardProps): React.ReactElement {
-	const [sale, setSale] = useState<VentaByIdResponse | undefined>(undefined)
-
-	useEffect(() => {
-		const fetchSale = async () => {
-			if (!saleId) return
-
-			const response = await fetch(`/api/sales/${saleId}`)
-				.then((res) => res.json())
-				.then((data) => data.body.sale)
-
-			setSale(response)
-		}
-
-		fetchSale()
-	}, [saleId])
-
+export default function SaleDetailCardSkeleton(): React.ReactElement {
 	return (
 		<Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
 			<CardHeader className="flex flex-row items-start bg-muted/50">
 				<div className="grid gap-0.5">
 					<CardTitle className="group flex items-center gap-2 text-lg">
-						Venta ID: {sale?.id}
+						Venta ID: <Skeleton className="h-4 w-12" />
 						<Button
 							size="icon"
 							variant="outline"
@@ -45,12 +27,9 @@ export default function SaleDetailCard({ saleId }: SaleDetailCardProps): React.R
 							<span className="sr-only">Copiar ID de venta</span>
 						</Button>
 					</CardTitle>
-					<CardDescription>
-						Fecha:{" "}
-						{new Date(sale?.fecha as Date).toLocaleDateString("es-CL", {
-							dateStyle: "full",
-						})}
-					</CardDescription>
+					<div className="flex items-center justify-center gap-1 text-sm text-muted-foreground">
+						Fecha: <Skeleton className="h-3 w-24" />
+					</div>
 				</div>
 				<div className="ml-auto flex items-center gap-1">
 					<DropdownMenu>
@@ -73,47 +52,35 @@ export default function SaleDetailCard({ saleId }: SaleDetailCardProps): React.R
 				<div className="grid gap-3">
 					<div className="font-semibold">Detalles de venta</div>
 					<ul className="grid gap-3">
-						{sale?.detalleVentas.map((detalle) => (
-							<li key={detalle.id} className="flex items-center justify-between">
-								<span className="text-muted-foreground">
-									{detalle.producto.nombre} x <span>{detalle.cantidad}</span>
-								</span>
-								<span>
-									{detalle.precioUnitario.toLocaleString("es-CL", {
-										style: "currency",
-										currency: "CLP",
-									})}
-								</span>
-							</li>
-						))}
+						<li className="flex items-center justify-between">
+							<span className="text-muted-foreground">
+								<Skeleton className="h-4 w-24" />
+								<span>x</span>
+								<Skeleton className="h-4 w-8" />
+							</span>
+							<span>
+								<Skeleton className="h-4 w-24" />
+							</span>
+						</li>
 					</ul>
 					<Separator className="my-2" />
 					<ul className="grid gap-3">
 						<li className="flex items-center justify-between">
 							<span className="text-muted-foreground">Subtotal</span>
 							<span>
-								{sale?.totalNeto.toLocaleString("es-CL", {
-									style: "currency",
-									currency: "CLP",
-								})}
+								<Skeleton className="h-4 w-24" />
 							</span>
 						</li>
 						<li className="flex items-center justify-between">
 							<span className="text-muted-foreground">IVA</span>
 							<span>
-								{sale?.iva.toLocaleString("es-CL", {
-									style: "currency",
-									currency: "CLP",
-								})}
+								<Skeleton className="h-4 w-24" />
 							</span>
 						</li>
 						<li className="flex items-center justify-between font-semibold">
 							<span className="text-muted-foreground">Total</span>
 							<span>
-								{sale?.totalFinal.toLocaleString("es-CL", {
-									style: "currency",
-									currency: "CLP",
-								})}
+								<Skeleton className="h-4 w-24" />
 							</span>
 						</li>
 					</ul>
@@ -124,23 +91,33 @@ export default function SaleDetailCard({ saleId }: SaleDetailCardProps): React.R
 					<dl className="grid gap-3">
 						<div className="flex items-center justify-between">
 							<dt className="text-muted-foreground">Nombre</dt>
-							<dd>{sale?.cliente.nombre}</dd>
+							<dd>
+								<Skeleton className="h-4 w-24" />
+							</dd>
 						</div>
 						<div className="flex items-center justify-between">
 							<dt className="text-muted-foreground">RUT</dt>
-							<dd>{sale?.cliente.rut}</dd>
+							<dd>
+								<Skeleton className="h-4 w-24" />
+							</dd>
 						</div>
 						<div className="flex items-center justify-between">
 							<dt className="text-muted-foreground">Telefono</dt>
-							<dd>{sale?.cliente.telefono}</dd>
+							<dd>
+								<Skeleton className="h-4 w-24" />
+							</dd>
 						</div>
 						<div className="flex items-center justify-between">
 							<dt className="text-muted-foreground">Direccion</dt>
-							<dd>{sale?.cliente.direccion}</dd>
+							<dd>
+								<Skeleton className="h-4 w-24" />
+							</dd>
 						</div>
 						<div className="flex items-center justify-between">
 							<dt className="text-muted-foreground">Razon Social</dt>
-							<dd>{sale?.cliente.razonSocial}</dd>
+							<dd>
+								<Skeleton className="h-4 w-24" />
+							</dd>
 						</div>
 					</dl>
 				</div>
@@ -151,17 +128,12 @@ export default function SaleDetailCard({ saleId }: SaleDetailCardProps): React.R
 						<div className="flex items-center justify-between">
 							<dt className="flex items-center gap-1 text-muted-foreground">
 								<CreditCard className="h-4 w-4" />
-								{sale?.tipo_pago}
+								<Skeleton className="h-4 w-24" />
 							</dt>
-							{sale?.tipo_pago === "TARJETA" && <dd>**** **** **** 4532</dd>}
 						</div>
 					</dl>
 				</div>
 			</CardContent>
 		</Card>
 	)
-}
-
-interface SaleDetailCardProps {
-	saleId: string | undefined
 }

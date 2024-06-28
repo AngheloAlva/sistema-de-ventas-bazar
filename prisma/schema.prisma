@@ -29,19 +29,6 @@ enum TIPO_DOCUMENTO {
   FACTURA
 }
 
-model Usuario {
-  id                  String  @id @default(uuid())
-  nombre              String
-  contrasena          String
-  direccion           String
-  telefono            String
-  rut                 String
-  fecha_nacimiento    DateTime
-  rol                 ROL
-  ventas              Venta[]
-}
-
-
 model Venta {
   id                String          @id @default(uuid())
   fecha             DateTime
@@ -50,7 +37,7 @@ model Venta {
   tipo_pago         TIPO_PAGO
   iva               Float
   totalFinal        Float
-  usuario           Usuario         @relation(fields: [usuarioId], references: [id])
+  usuario           User         @relation(fields: [usuarioId], references: [id])
   usuarioId         String
   detalleVentas     DetalleVenta[]
   cliente           Cliente?        @relation(fields: [clienteId], references: [id])
@@ -99,4 +86,59 @@ model DiaVentas {
   fecha             DateTime @unique
   abierto           Boolean  @default(false)
   ventas            Venta[]
+}
+
+// Auth.js models
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  password      String
+  emailVerified DateTime?
+  image         String?
+  phone         String?
+  address       String?
+  rut           String?
+  bornDate      DateTime?
+  ventas        Venta[]
+  accounts      Account[]
+  sessions      Session[]
+  
+  role          String          @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+  @@id([identifier, token])
 }
